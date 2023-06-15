@@ -1,17 +1,16 @@
-import express from "express"
-import { Server } from 'socket.io';
-import cors from 'cors';
+const http = require("http");
+const express = require("express");
+const cors = require("cors");
+const socketIO = require("socket.io");
 
-const PORT = process.env.PORT || 8000
 const app = express();
+const PORT = process.env.PORT;
+
 app.use(cors());
 
-const io = new Server(9000, {
-  cors: {
-    origin: ['http://localhost:3000', ["https://648ae07cd7b2bf0087e70cfe--amazing-lollipop-44bf5e.netlify.app"]],
-    methods: ['GET', 'POST']
-  }
-})
+const server = http.createServer(app);
+
+const io = socketIO(server);
 io.on("connection", (socket) => {
   // console.log("connection", socket.id)
   socket.on("join", (data) => {
